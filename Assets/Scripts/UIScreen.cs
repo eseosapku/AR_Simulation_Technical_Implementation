@@ -33,6 +33,11 @@ namespace FirstResponse
         {
         }
 
+        protected static void Go(ScreenId screen)
+        {
+            EventBus<ScreenRequested>.Publish(new ScreenRequested(screen));
+        }
+
         void SetVisible(bool visible)
         {
             Group.alpha = visible ? 1f : 0f;
