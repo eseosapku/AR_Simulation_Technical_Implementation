@@ -41,6 +41,12 @@ namespace FirstResponse
 
         public void ShowOnly(ScreenId target)
         {
+            if (!screens.ContainsKey(target))
+            {
+                Debug.LogWarning($"No screen built for {target}");
+                return;
+            }
+
             foreach (var pair in screens)
             {
                 if (pair.Key == target)

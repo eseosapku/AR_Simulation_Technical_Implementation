@@ -2,6 +2,7 @@
     "name": "FirstResponse",
     "rootNamespace": "FirstResponse",
     "references": [
+        "UnityEngine.UI",
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "Unity.XR.ARFoundation",
