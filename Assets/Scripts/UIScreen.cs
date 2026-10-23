@@ -5,13 +5,13 @@ namespace FirstResponse
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIScreen : MonoBehaviour
     {
-        CanvasGroup group;
+        private CanvasGroup group;
 
         public abstract ScreenId Id { get; }
 
         public bool IsVisible => Group.alpha > 0f;
 
-        CanvasGroup Group => group != null ? group : group = GetComponent<CanvasGroup>();
+        private CanvasGroup Group => group != null ? group : group = GetComponent<CanvasGroup>();
 
         public void Show()
         {
@@ -38,7 +38,7 @@ namespace FirstResponse
             EventBus<ScreenRequested>.Publish(new ScreenRequested(screen));
         }
 
-        void SetVisible(bool visible)
+        private void SetVisible(bool visible)
         {
             Group.alpha = visible ? 1f : 0f;
             Group.interactable = visible;

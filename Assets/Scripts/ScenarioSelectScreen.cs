@@ -5,13 +5,13 @@ namespace FirstResponse
 {
     public class ScenarioSelectScreen : UIScreen
     {
-        [SerializeField] Button backButton;
-        [SerializeField] Button forearmCard;
-        [SerializeField] Button thighCard;
+        [SerializeField] private Button backButton;
+        [SerializeField] private Button forearmCard;
+        [SerializeField] private Button thighCard;
 
         public override ScreenId Id => ScreenId.ScenarioSelect;
 
-        void Awake()
+        private void Awake()
         {
             backButton.onClick.AddListener(() => Go(ScreenId.Start));
             forearmCard.onClick.AddListener(() => Choose(ScenarioId.Forearm));

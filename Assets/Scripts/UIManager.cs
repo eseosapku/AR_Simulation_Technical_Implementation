@@ -5,36 +5,36 @@ namespace FirstResponse
 {
     public class UIManager : MonoBehaviour
     {
-        [SerializeField] ScreenId firstScreen = ScreenId.Start;
+        [SerializeField] private ScreenId firstScreen = ScreenId.Start;
 
-        readonly Dictionary<ScreenId, UIScreen> screens = new Dictionary<ScreenId, UIScreen>();
+        private readonly Dictionary<ScreenId, UIScreen> screens = new Dictionary<ScreenId, UIScreen>();
 
         public ScreenId Current { get; private set; }
 
-        void Awake()
+        private void Awake()
         {
-            foreach (var screen in GetComponentsInChildren<UIScreen>(true))
+            foreach (UIScreen screen in GetComponentsInChildren<UIScreen>(true))
             {
                 screens[screen.Id] = screen;
             }
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             EventBus<ScreenRequested>.Subscribe(OnScreenRequested);
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             EventBus<ScreenRequested>.Unsubscribe(OnScreenRequested);
         }
 
-        void Start()
+        private void Start()
         {
             ShowOnly(firstScreen);
         }
 
-        void OnScreenRequested(ScreenRequested message)
+        private void OnScreenRequested(ScreenRequested message)
         {
             ShowOnly(message.Screen);
         }
@@ -47,7 +47,7 @@ namespace FirstResponse
                 return;
             }
 
-            foreach (var pair in screens)
+            foreach (KeyValuePair<ScreenId, UIScreen> pair in screens)
             {
                 if (pair.Key == target)
                 {

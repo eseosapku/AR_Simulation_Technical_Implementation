@@ -5,7 +5,7 @@ namespace FirstResponse.Tests
 {
     public class ScenarioConfigTests
     {
-        ScenarioConfig config;
+        private ScenarioConfig config;
 
         [SetUp]
         public void Create()
@@ -23,7 +23,7 @@ namespace FirstResponse.Tests
         public void BleedingUsesTheConfiguredFlow()
         {
             config.baseFlowMlPerSec = 5f;
-            var model = config.CreateBleeding();
+            BleedingModel model = config.CreateBleeding();
             model.Tick(1f);
 
             Assert.AreEqual(5f, model.TotalLoss, 0.01f);
@@ -32,7 +32,7 @@ namespace FirstResponse.Tests
         [Test]
         public void EachScenarioGetsItsOwnFreshModel()
         {
-            var first = config.CreateBleeding();
+            BleedingModel first = config.CreateBleeding();
             first.Tick(3f);
 
             Assert.AreEqual(0f, config.CreateBleeding().TotalLoss);

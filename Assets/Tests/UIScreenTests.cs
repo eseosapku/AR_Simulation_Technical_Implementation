@@ -5,7 +5,7 @@ namespace FirstResponse.Tests
 {
     public class UIScreenTests
     {
-        class FakeScreen : UIScreen
+        private class FakeScreen : UIScreen
         {
             public int ShownCount;
             public int HiddenCount;
@@ -17,9 +17,9 @@ namespace FirstResponse.Tests
             protected override void OnHidden() => HiddenCount++;
         }
 
-        GameObject host;
-        FakeScreen screen;
-        CanvasGroup group;
+        private GameObject host;
+        private FakeScreen screen;
+        private CanvasGroup group;
 
         [SetUp]
         public void Create()

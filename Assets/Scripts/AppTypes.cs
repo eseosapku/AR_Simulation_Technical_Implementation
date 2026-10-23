@@ -88,7 +88,7 @@ namespace FirstResponse
 
         public bool Tapped(bool hitFloor)
         {
-            var allowed = hitFloor && (State == PlacementState.Aiming || State == PlacementState.Previewing);
+            bool allowed = hitFloor && (State == PlacementState.Aiming || State == PlacementState.Previewing);
             return allowed && Change(PlacementState.Previewing);
         }
 
@@ -102,7 +102,7 @@ namespace FirstResponse
             return State == PlacementState.Confirmed && Change(PlacementState.Previewing);
         }
 
-        bool Change(PlacementState next)
+        private bool Change(PlacementState next)
         {
             State = next;
             return true;
@@ -114,7 +114,7 @@ namespace FirstResponse
         public static bool TryGet(out Vector2 point)
         {
             point = default;
-            var pointer = Pointer.current;
+            Pointer pointer = Pointer.current;
             if (pointer == null || !pointer.press.wasPressedThisFrame)
             {
                 return false;

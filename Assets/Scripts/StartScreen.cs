@@ -5,13 +5,13 @@ namespace FirstResponse
 {
     public class StartScreen : UIScreen
     {
-        [SerializeField] Button startButton;
-        [SerializeField] Button howButton;
-        [SerializeField] Button historyButton;
+        [SerializeField] private Button startButton;
+        [SerializeField] private Button howButton;
+        [SerializeField] private Button historyButton;
 
         public override ScreenId Id => ScreenId.Start;
 
-        void Awake()
+        private void Awake()
         {
             startButton.onClick.AddListener(() => Go(ScreenId.ScenarioSelect));
             howButton.onClick.AddListener(() => Go(ScreenId.HowItWorks));

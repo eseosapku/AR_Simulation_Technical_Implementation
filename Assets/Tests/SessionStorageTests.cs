@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
@@ -6,10 +7,10 @@ namespace FirstResponse.Tests
 {
     public class SessionStorageTests
     {
-        string folder;
-        SessionStorage storage;
+        private string folder;
+        private SessionStorage storage;
 
-        static SessionRecord Record(string ended, float score)
+        private static SessionRecord Record(string ended, float score)
         {
             return new SessionRecord { scenarioId = "Thigh", outcome = "Passed", endedAt = ended, scorePercent = score };
         }
@@ -30,11 +31,11 @@ namespace FirstResponse.Tests
         [Test]
         public void SavedSessionLoadsBackIdentically()
         {
-            var record = Record("2026-10-20T10:00:00Z", 86f);
+            SessionRecord record = Record("2026-10-20T10:00:00Z", 86f);
             record.steps.Add(new StepResult { stepId = "DirectPressure", completed = true, score = 0.8f });
 
             storage.Save(record);
-            var loaded = storage.LoadRecent(5)[0];
+            SessionRecord loaded = storage.LoadRecent(5)[0];
 
             Assert.AreEqual(record.sessionId, loaded.sessionId);
             Assert.AreEqual(86f, loaded.scorePercent);
@@ -49,7 +50,7 @@ namespace FirstResponse.Tests
             storage.Save(Record("2026-10-20T10:00:00Z", 90f));
             storage.Save(Record("2026-10-19T10:00:00Z", 70f));
 
-            var recent = storage.LoadRecent(5);
+            IReadOnlyList<SessionRecord> recent = storage.LoadRecent(5);
 
             Assert.AreEqual(90f, recent[0].scorePercent);
             Assert.AreEqual(50f, recent[2].scorePercent);
@@ -58,12 +59,12 @@ namespace FirstResponse.Tests
         [Test]
         public void OldestSessionsArePrunedPastTheLimit()
         {
-            for (var day = 10; day < 15; day++)
+            for (int day = 10; day < 15; day++)
             {
                 storage.Save(Record($"2026-10-{day}T10:00:00Z", day));
             }
 
-            var recent = storage.LoadRecent(10);
+            IReadOnlyList<SessionRecord> recent = storage.LoadRecent(10);
 
             Assert.AreEqual(3, recent.Count);
             Assert.AreEqual(14f, recent[0].scorePercent);

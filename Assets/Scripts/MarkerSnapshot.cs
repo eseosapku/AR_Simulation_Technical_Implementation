@@ -14,8 +14,8 @@ namespace FirstResponse
     {
         public const int Count = 4;
 
-        readonly bool[] visible = new bool[Count];
-        readonly Pose[] poses = new Pose[Count];
+        private readonly bool[] visible = new bool[Count];
+        private readonly Pose[] poses = new Pose[Count];
 
         public void Set(MarkerId id, bool isVisible, Pose pose)
         {

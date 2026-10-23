@@ -4,9 +4,9 @@ namespace FirstResponse.Tests
 {
     public class BleedingModelTests
     {
-        static BleedingModel Thigh() => new BleedingModel(25f, 1500f, false);
+        private static BleedingModel Thigh() => new BleedingModel(25f, 1500f, false);
 
-        static BleedingModel Forearm() => new BleedingModel(5f, 1500f, true);
+        private static BleedingModel Forearm() => new BleedingModel(5f, 1500f, true);
 
         [SetUp]
         public void Reset()
@@ -17,7 +17,7 @@ namespace FirstResponse.Tests
         [Test]
         public void UntreatedWoundLosesBloodOverTime()
         {
-            var model = Thigh();
+            BleedingModel model = Thigh();
             model.Tick(2f);
 
             Assert.AreEqual(50f, model.TotalLoss, 0.01f);
@@ -27,7 +27,7 @@ namespace FirstResponse.Tests
         [Test]
         public void PressureSlowsTheBleeding()
         {
-            var model = Thigh();
+            BleedingModel model = Thigh();
             model.PressureStarted();
 
             Assert.AreEqual(BleedingState.PressureApplied, model.State);
@@ -37,7 +37,7 @@ namespace FirstResponse.Tests
         [Test]
         public void LiftingPressureEarlyRestartsTheBleeding()
         {
-            var model = Thigh();
+            BleedingModel model = Thigh();
             model.PressureStarted();
             model.PressureReleased();
 
@@ -48,7 +48,7 @@ namespace FirstResponse.Tests
         [Test]
         public void HeldPressureControlsAForearmCut()
         {
-            var model = Forearm();
+            BleedingModel model = Forearm();
             model.PressureStarted();
             model.PressureHeld();
             model.Tick(10f);
@@ -60,7 +60,7 @@ namespace FirstResponse.Tests
         [Test]
         public void ThighWoundNeedsATourniquetAfterPressure()
         {
-            var model = Thigh();
+            BleedingModel model = Thigh();
             model.PressureStarted();
             model.PressureHeld();
 
@@ -71,12 +71,12 @@ namespace FirstResponse.Tests
         [Test]
         public void TighteningTheWindlassStopsTheFlow()
         {
-            var model = Thigh();
+            BleedingModel model = Thigh();
             model.PressureStarted();
             model.PressureHeld();
             model.TourniquetPlaced();
             model.Tighten(0.5f);
-            var halfway = model.FlowRate;
+            float halfway = model.FlowRate;
             model.Tighten(1f);
 
             Assert.Less(halfway, 15f);
@@ -87,7 +87,7 @@ namespace FirstResponse.Tests
         [Test]
         public void TourniquetIsIgnoredOnAControllableBleed()
         {
-            var model = Forearm();
+            BleedingModel model = Forearm();
             model.TourniquetPlaced();
 
             Assert.AreEqual(BleedingState.Uncontrolled, model.State);
@@ -96,7 +96,7 @@ namespace FirstResponse.Tests
         [Test]
         public void ReachingTheFatalLossEndsTheScenario()
         {
-            var model = Thigh();
+            BleedingModel model = Thigh();
             BleedingState announced = BleedingState.Uncontrolled;
             EventBus<BleedingChanged>.Subscribe(m => announced = m.State);
             model.Tick(100f);

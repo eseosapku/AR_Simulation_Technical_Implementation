@@ -4,7 +4,7 @@ namespace FirstResponse.Tests
 {
     public class PlacementFlowTests
     {
-        PlacementFlow flow;
+        private PlacementFlow flow;
 
         [SetUp]
         public void Create()

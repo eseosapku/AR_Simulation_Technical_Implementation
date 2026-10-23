@@ -23,9 +23,9 @@ namespace FirstResponse
 
     public class BleedingModel
     {
-        readonly float baseFlow;
-        readonly float fatalLoss;
-        readonly bool pressureIsEnough;
+        private readonly float baseFlow;
+        private readonly float fatalLoss;
+        private readonly bool pressureIsEnough;
 
         public BleedingModel(float baseFlow, float fatalLoss, bool pressureIsEnough)
         {
@@ -117,7 +117,7 @@ namespace FirstResponse
             Set(BleedingState.Tightening, baseFlow * 0.6f * (1f - progress));
         }
 
-        void Set(BleedingState next, float flow)
+        private void Set(BleedingState next, float flow)
         {
             FlowRate = flow;
             if (next == State)

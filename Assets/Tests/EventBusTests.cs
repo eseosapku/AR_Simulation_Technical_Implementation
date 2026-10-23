@@ -4,14 +4,14 @@ namespace FirstResponse.Tests
 {
     public class EventBusTests
     {
-        readonly struct OtherMessage
+        private readonly struct OtherMessage
         {
         }
 
-        ScreenId received;
-        int calls;
+        private ScreenId received;
+        private int calls;
 
-        void Record(ScreenRequested message)
+        private void Record(ScreenRequested message)
         {
             received = message.Screen;
             calls++;

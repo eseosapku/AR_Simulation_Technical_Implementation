@@ -7,35 +7,35 @@ namespace FirstResponse
 {
     public class ARPlacement : MonoBehaviour
     {
-        [SerializeField] ARRaycastManager raycaster;
-        [SerializeField] ARPlaneManager planes;
-        [SerializeField] Transform reticle;
-        [SerializeField] Transform crashSite;
+        [SerializeField] private ARRaycastManager raycaster;
+        [SerializeField] private ARPlaneManager planes;
+        [SerializeField] private Transform reticle;
+        [SerializeField] private Transform crashSite;
 
-        static readonly List<ARRaycastHit> Hits = new List<ARRaycastHit>();
-        readonly PlacementFlow flow = new PlacementFlow();
-        ARAnchor anchor;
-        bool listening;
+        private static readonly List<ARRaycastHit> Hits = new List<ARRaycastHit>();
+        private readonly PlacementFlow flow = new PlacementFlow();
+        private ARAnchor anchor;
+        private bool listening;
 
-        void OnEnable()
+        private void OnEnable()
         {
             EventBus<ScreenRequested>.Subscribe(OnScreen);
             EventBus<PlacementRequested>.Subscribe(OnRequest);
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             EventBus<ScreenRequested>.Unsubscribe(OnScreen);
             EventBus<PlacementRequested>.Unsubscribe(OnRequest);
         }
 
-        void Start()
+        private void Start()
         {
             crashSite.gameObject.SetActive(false);
             reticle.gameObject.SetActive(false);
         }
 
-        void OnScreen(ScreenRequested message)
+        private void OnScreen(ScreenRequested message)
         {
             listening = message.Screen == ScreenId.Setup;
             if (listening)
@@ -44,7 +44,7 @@ namespace FirstResponse
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (!listening || flow.State == PlacementState.Confirmed)
             {
@@ -56,21 +56,21 @@ namespace FirstResponse
                 Announce();
             }
 
-            var aimed = Cast(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), out var centre);
+            bool aimed = Cast(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), out Pose centre);
             reticle.gameObject.SetActive(aimed);
             if (aimed)
             {
                 reticle.SetPositionAndRotation(centre.position, centre.rotation);
             }
 
-            if (ScreenTap.TryGet(out var point) && flow.Tapped(Cast(point, out var pose)))
+            if (ScreenTap.TryGet(out Vector2 point) && flow.Tapped(Cast(point, out Pose pose)))
             {
                 Preview(pose.position);
                 Announce();
             }
         }
 
-        bool Cast(Vector2 point, out Pose pose)
+        private bool Cast(Vector2 point, out Pose pose)
         {
             pose = default;
             if (!raycaster.Raycast(point, Hits, TrackableType.PlaneWithinPolygon))
@@ -82,17 +82,17 @@ namespace FirstResponse
             return true;
         }
 
-        void Preview(Vector3 position)
+        private void Preview(Vector3 position)
         {
-            var toCamera = Camera.main.transform.position - position;
+            Vector3 toCamera = Camera.main.transform.position - position;
             toCamera.y = 0f;
-            var facing = toCamera.sqrMagnitude > 0.001f ? Quaternion.LookRotation(toCamera) : Quaternion.identity;
+            Quaternion facing = toCamera.sqrMagnitude > 0.001f ? Quaternion.LookRotation(toCamera) : Quaternion.identity;
             crashSite.SetParent(null);
             crashSite.SetPositionAndRotation(position, facing);
             crashSite.gameObject.SetActive(true);
         }
 
-        void OnRequest(PlacementRequested message)
+        private void OnRequest(PlacementRequested message)
         {
             if (message.Action == PlacementAction.Confirm && flow.Confirm())
             {
@@ -106,9 +106,9 @@ namespace FirstResponse
             Announce();
         }
 
-        void Lock()
+        private void Lock()
         {
-            var holder = new GameObject("CrashSiteAnchor");
+            GameObject holder = new GameObject("CrashSiteAnchor");
             holder.transform.SetPositionAndRotation(crashSite.position, crashSite.rotation);
             anchor = holder.AddComponent<ARAnchor>();
             crashSite.SetParent(anchor.transform, true);
@@ -116,7 +116,7 @@ namespace FirstResponse
             ShowPlanes(false);
         }
 
-        void Unlock()
+        private void Unlock()
         {
             crashSite.SetParent(null, true);
             if (anchor != null)
@@ -128,16 +128,16 @@ namespace FirstResponse
             ShowPlanes(true);
         }
 
-        void ShowPlanes(bool visible)
+        private void ShowPlanes(bool visible)
         {
             planes.enabled = visible;
-            foreach (var plane in planes.trackables)
+            foreach (ARPlane plane in planes.trackables)
             {
                 plane.gameObject.SetActive(visible);
             }
         }
 
-        void Announce()
+        private void Announce()
         {
             EventBus<PlacementChanged>.Publish(new PlacementChanged(flow.State));
         }

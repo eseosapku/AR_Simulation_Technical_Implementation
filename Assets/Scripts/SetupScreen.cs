@@ -13,29 +13,29 @@ namespace FirstResponse
 
     public class SetupScreen : UIScreen
     {
-        [SerializeField] TextMeshProUGUI statusLabel;
-        [SerializeField] TextMeshProUGUI titleLabel;
-        [SerializeField] TextMeshProUGUI detailLabel;
-        [SerializeField] TextMeshProUGUI primaryLabel;
-        [SerializeField] Button primaryButton;
-        [SerializeField] Button moveButton;
+        [SerializeField] private TextMeshProUGUI statusLabel;
+        [SerializeField] private TextMeshProUGUI titleLabel;
+        [SerializeField] private TextMeshProUGUI detailLabel;
+        [SerializeField] private TextMeshProUGUI primaryLabel;
+        [SerializeField] private Button primaryButton;
+        [SerializeField] private Button moveButton;
 
-        PlacementState state = PlacementState.Scanning;
+        private PlacementState state = PlacementState.Scanning;
 
         public override ScreenId Id => ScreenId.Setup;
 
-        void Awake()
+        private void Awake()
         {
             primaryButton.onClick.AddListener(PressPrimary);
             moveButton.onClick.AddListener(() => EventBus<PlacementRequested>.Publish(new PlacementRequested(PlacementAction.Move)));
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             EventBus<PlacementChanged>.Subscribe(OnPlacement);
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             EventBus<PlacementChanged>.Unsubscribe(OnPlacement);
         }
@@ -45,27 +45,27 @@ namespace FirstResponse
             Render();
         }
 
-        void OnPlacement(PlacementChanged message)
+        private void OnPlacement(PlacementChanged message)
         {
             state = message.State;
             Render();
         }
 
-        void Render()
+        private void Render()
         {
-            var copy = Describe(state);
+            (string status, string title, string detail) copy = Describe(state);
             statusLabel.text = copy.status;
             titleLabel.text = copy.title;
             detailLabel.text = copy.detail;
-            var action = PrimaryAction(state);
+            SetupAction action = PrimaryAction(state);
             primaryButton.gameObject.SetActive(action != SetupAction.None);
             primaryLabel.text = action == SetupAction.Begin ? "Begin" : "Confirm";
             moveButton.gameObject.SetActive(state == PlacementState.Confirmed);
         }
 
-        void PressPrimary()
+        private void PressPrimary()
         {
-            var action = PrimaryAction(state);
+            SetupAction action = PrimaryAction(state);
             if (action == SetupAction.Confirm)
             {
                 EventBus<PlacementRequested>.Publish(new PlacementRequested(PlacementAction.Confirm));

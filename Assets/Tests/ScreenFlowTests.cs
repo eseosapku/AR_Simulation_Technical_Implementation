@@ -5,13 +5,13 @@ namespace FirstResponse.Tests
 {
     public class ScreenFlowTests
     {
-        GameObject host;
-        ScreenId requested;
-        ScenarioId chosen;
+        private GameObject host;
+        private ScreenId requested;
+        private ScenarioId chosen;
 
-        void OnRequested(ScreenRequested message) => requested = message.Screen;
+        private void OnRequested(ScreenRequested message) => requested = message.Screen;
 
-        void OnChosen(ScenarioChosen message) => chosen = message.Scenario;
+        private void OnChosen(ScenarioChosen message) => chosen = message.Scenario;
 
         [SetUp]
         public void Create()
@@ -65,7 +65,7 @@ namespace FirstResponse.Tests
             Assert.AreEqual(ScreenId.Start, requested);
         }
 
-        static string Stamp(int day, int hour, int minute)
+        private static string Stamp(int day, int hour, int minute)
         {
             return new System.DateTime(2026, 10, day, hour, minute, 0, System.DateTimeKind.Local).ToUniversalTime().ToString("o");
         }
@@ -73,7 +73,7 @@ namespace FirstResponse.Tests
         [Test]
         public void HistoryShowsFriendlyDates()
         {
-            var now = new System.DateTime(2026, 10, 21, 18, 0, 0, System.DateTimeKind.Local);
+            System.DateTime now = new System.DateTime(2026, 10, 21, 18, 0, 0, System.DateTimeKind.Local);
 
             Assert.AreEqual("Today, 10:06", HistoryScreen.WhenText(Stamp(21, 10, 6), now));
             Assert.AreEqual("Yesterday", HistoryScreen.WhenText(Stamp(20, 9, 0), now));

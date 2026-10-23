@@ -5,11 +5,11 @@ namespace FirstResponse
 {
     public class SafetyNoticeScreen : UIScreen
     {
-        [SerializeField] Button understandButton;
+        [SerializeField] private Button understandButton;
 
         public override ScreenId Id => ScreenId.SafetyNotice;
 
-        void Awake()
+        private void Awake()
         {
             understandButton.onClick.AddListener(Acknowledge);
         }

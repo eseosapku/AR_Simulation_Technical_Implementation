@@ -17,12 +17,23 @@ namespace FirstResponse
 
     public class SessionStorage : ISessionStorage
     {
-        static ISessionStorage device;
+        private static ISessionStorage device;
 
-        readonly string folder;
-        readonly int keep;
+        private readonly string folder;
+        private readonly int keep;
 
-        public static ISessionStorage Device => device ??= new SessionStorage(Path.Combine(Application.persistentDataPath, "sessions"));
+        public static ISessionStorage Device
+        {
+            get
+            {
+                if (device == null)
+                {
+                    device = new SessionStorage(Path.Combine(Application.persistentDataPath, "sessions"));
+                }
+
+                return device;
+            }
+        }
 
         public SessionStorage(string folder, int keep = 100)
         {
@@ -33,8 +44,8 @@ namespace FirstResponse
 
         public void Save(SessionRecord record)
         {
-            var path = Path.Combine(folder, record.sessionId + ".json");
-            var temp = path + ".tmp";
+            string path = Path.Combine(folder, record.sessionId + ".json");
+            string temp = path + ".tmp";
             File.WriteAllText(temp, JsonUtility.ToJson(record, true));
             if (File.Exists(path))
             {
@@ -52,18 +63,18 @@ namespace FirstResponse
 
         public void DeleteAll()
         {
-            foreach (var file in Directory.GetFiles(folder, "*.json"))
+            foreach (string file in Directory.GetFiles(folder, "*.json"))
             {
                 File.Delete(file);
             }
         }
 
-        List<SessionRecord> LoadAll()
+        private List<SessionRecord> LoadAll()
         {
-            var records = new List<SessionRecord>();
-            foreach (var file in Directory.GetFiles(folder, "*.json"))
+            List<SessionRecord> records = new List<SessionRecord>();
+            foreach (string file in Directory.GetFiles(folder, "*.json"))
             {
-                var record = Read(file);
+                SessionRecord record = Read(file);
                 if (record != null)
                 {
                     records.Add(record);
@@ -73,11 +84,11 @@ namespace FirstResponse
             return records.OrderByDescending(r => r.endedAt, StringComparer.Ordinal).ToList();
         }
 
-        static SessionRecord Read(string file)
+        private static SessionRecord Read(string file)
         {
             try
             {
-                var record = JsonUtility.FromJson<SessionRecord>(File.ReadAllText(file));
+                SessionRecord record = JsonUtility.FromJson<SessionRecord>(File.ReadAllText(file));
                 return record != null && record.schemaVersion > 0 ? record : null;
             }
             catch (Exception)
@@ -86,9 +97,9 @@ namespace FirstResponse
             }
         }
 
-        void Prune()
+        private void Prune()
         {
-            foreach (var old in LoadAll().Skip(keep))
+            foreach (SessionRecord old in LoadAll().Skip(keep))
             {
                 File.Delete(Path.Combine(folder, old.sessionId + ".json"));
             }

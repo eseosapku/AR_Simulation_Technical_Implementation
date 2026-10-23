@@ -4,7 +4,7 @@ namespace FirstResponse
 {
     public static class EventBus<T>
     {
-        static Action<T> handlers;
+        private static Action<T> handlers;
 
         public static void Subscribe(Action<T> handler)
         {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -6,48 +7,48 @@ namespace FirstResponse
 {
     public class ARTrackingManager : MonoBehaviour
     {
-        [SerializeField] ARTrackedImageManager imageManager;
+        [SerializeField] private ARTrackedImageManager imageManager;
 
-        readonly MarkerSnapshot snapshot = new MarkerSnapshot();
+        private readonly MarkerSnapshot snapshot = new MarkerSnapshot();
 
         public MarkerSnapshot Snapshot => snapshot;
 
-        void OnEnable()
+        private void OnEnable()
         {
             imageManager.trackablesChanged.AddListener(OnChanged);
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             imageManager.trackablesChanged.RemoveListener(OnChanged);
         }
 
-        void OnChanged(ARTrackablesChangedEventArgs<ARTrackedImage> changes)
+        private void OnChanged(ARTrackablesChangedEventArgs<ARTrackedImage> changes)
         {
-            foreach (var image in changes.added)
+            foreach (ARTrackedImage image in changes.added)
             {
                 Record(image);
             }
 
-            foreach (var image in changes.updated)
+            foreach (ARTrackedImage image in changes.updated)
             {
                 Record(image);
             }
 
-            foreach (var removed in changes.removed)
+            foreach (KeyValuePair<TrackableId, ARTrackedImage> removed in changes.removed)
             {
                 Record(removed.Value, false);
             }
         }
 
-        void Record(ARTrackedImage image, bool present = true)
+        private void Record(ARTrackedImage image, bool present = true)
         {
-            if (image == null || !MarkerSnapshot.TryParse(image.referenceImage.name, out var id))
+            if (image == null || !MarkerSnapshot.TryParse(image.referenceImage.name, out MarkerId id))
             {
                 return;
             }
 
-            var tracking = present && image.trackingState == TrackingState.Tracking;
+            bool tracking = present && image.trackingState == TrackingState.Tracking;
             snapshot.Set(id, tracking, new Pose(image.transform.position, image.transform.rotation));
         }
     }
