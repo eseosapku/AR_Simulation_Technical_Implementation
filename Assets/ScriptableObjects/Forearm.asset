@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Forearm
   m_EditorClassIdentifier: FirstResponse::FirstResponse.ScenarioConfig
   scenario: 0
-  displayName: Thigh wound
-  briefing: 
-  baseFlowMlPerSec: 25
+  displayName: Forearm cut
+  briefing: "A market trader in Lagos was cut by an okada\u2019s broken mirror. The forearm is bleeding steadily."
+  baseFlowMlPerSec: 5
   fatalLossMl: 1500
-  pressureIsEnough: 0
+  pressureIsEnough: 1
   pressureSeconds: 30
   tourniquetMinCm: 5
   tourniquetMaxCm: 7

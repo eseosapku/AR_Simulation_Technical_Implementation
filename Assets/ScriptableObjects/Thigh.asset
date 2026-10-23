@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a872abcdab05c640aab833351a32381, type: 3}
   m_Name: Thigh
   m_EditorClassIdentifier: FirstResponse::FirstResponse.ScenarioConfig
-  scenario: 0
+  scenario: 1
   displayName: Thigh wound
-  briefing: 
+  briefing: An okada passenger was thrown onto the road. The thigh is bleeding heavily
   baseFlowMlPerSec: 25
   fatalLossMl: 1500
   pressureIsEnough: 0
