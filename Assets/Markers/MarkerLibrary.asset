@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
+  m_Name: MarkerLibrary
+  m_EditorClassIdentifier: Unity.XR.ARSubsystems::UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary
+  m_GuidLow: 4946074577035777829
+  m_GuidHigh: 12100400607157629367
+  m_DataStore:
+    m_Storage: []
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 4982205264852364546
+      m_GuidHigh: 14272131202855228822
+    m_SerializedTextureGuid:
+      m_GuidLow: 1608959389664248495
+      m_GuidHigh: 1295857938448132731
+    m_Size: {x: 0.06, y: 0.06}
+    m_SpecifySize: 1
+    m_Name: MarkerAWound
+    m_Texture: {fileID: 2800000, guid: 4ef782af2c0a16547b2a92e4edcffb11, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 4698733835448210712
+      m_GuidHigh: 16464895764472666787
+    m_SerializedTextureGuid:
+      m_GuidLow: 370586405306390208
+      m_GuidHigh: 10622818844954173386
+    m_Size: {x: 0.06, y: 0.06}
+    m_SpecifySize: 1
+    m_Name: MarkerBTourniquet
+    m_Texture: {fileID: 2800000, guid: 46e056c0965f0524ca9fd11675d56b93, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5034172974955277415
+      m_GuidHigh: 4041943143601600910
+    m_SerializedTextureGuid:
+      m_GuidLow: 18096677058083808311
+      m_GuidHigh: 418711956285329898
+    m_Size: {x: 0.06, y: 0.06}
+    m_SpecifySize: 1
+    m_Name: MarkerCWindlass
+    m_Texture: {fileID: 2800000, guid: 6e0be4374fe7fb24ea9198494e90cf05, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5425809449491910120
+      m_GuidHigh: 6456829635925977742
+    m_SerializedTextureGuid:
+      m_GuidLow: 1401790331475990643
+      m_GuidHigh: 812363873296853800
+    m_Size: {x: 0.06, y: 0.06}
+    m_SpecifySize: 1
+    m_Name: MarkerDJoint
+    m_Texture: {fileID: 2800000, guid: 2534187328e11374282b3880a318460b, type: 3}
