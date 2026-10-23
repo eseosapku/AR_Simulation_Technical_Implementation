@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a872abcdab05c640aab833351a32381, type: 3}
+  m_Name: Forearm
+  m_EditorClassIdentifier: FirstResponse::FirstResponse.ScenarioConfig
+  scenario: 0
+  displayName: Thigh wound
+  briefing: 
+  baseFlowMlPerSec: 25
+  fatalLossMl: 1500
+  pressureIsEnough: 0
+  pressureSeconds: 30
+  tourniquetMinCm: 5
+  tourniquetMaxCm: 7
+  jointClearanceCm: 5
+  windlassDegrees: 540
+  passScore: 80
+  emergencyNumber: 112
