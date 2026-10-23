@@ -64,5 +64,28 @@ namespace FirstResponse.Tests
 
             Assert.AreEqual(ScreenId.Start, requested);
         }
+
+        static string Stamp(int day, int hour, int minute)
+        {
+            return new System.DateTime(2026, 10, day, hour, minute, 0, System.DateTimeKind.Local).ToUniversalTime().ToString("o");
+        }
+
+        [Test]
+        public void HistoryShowsFriendlyDates()
+        {
+            var now = new System.DateTime(2026, 10, 21, 18, 0, 0, System.DateTimeKind.Local);
+
+            Assert.AreEqual("Today, 10:06", HistoryScreen.WhenText(Stamp(21, 10, 6), now));
+            Assert.AreEqual("Yesterday", HistoryScreen.WhenText(Stamp(20, 9, 0), now));
+            Assert.AreEqual("Oct 17", HistoryScreen.WhenText(Stamp(17, 9, 0), now));
+            Assert.AreEqual("Unknown date", HistoryScreen.WhenText("garbage", now));
+        }
+
+        [Test]
+        public void HistoryShowsScenarioNames()
+        {
+            Assert.AreEqual("Thigh wound", HistoryScreen.ScenarioName("Thigh"));
+            Assert.AreEqual("Forearm cut", HistoryScreen.ScenarioName("Forearm"));
+        }
     }
 }

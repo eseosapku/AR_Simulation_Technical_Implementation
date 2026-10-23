@@ -1,3 +1,7 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+
 namespace FirstResponse
 {
     public enum ScreenId
@@ -19,6 +23,40 @@ namespace FirstResponse
         Thigh
     }
 
+    public enum PlacementState
+    {
+        Scanning,
+        Aiming,
+        Previewing,
+        Confirmed
+    }
+
+    public enum PlacementAction
+    {
+        Confirm,
+        Move
+    }
+
+    public readonly struct PlacementChanged
+    {
+        public readonly PlacementState State;
+
+        public PlacementChanged(PlacementState state)
+        {
+            State = state;
+        }
+    }
+
+    public readonly struct PlacementRequested
+    {
+        public readonly PlacementAction Action;
+
+        public PlacementRequested(PlacementAction action)
+        {
+            Action = action;
+        }
+    }
+
     public readonly struct ScreenRequested
     {
         public readonly ScreenId Screen;
@@ -36,6 +74,59 @@ namespace FirstResponse
         public ScenarioChosen(ScenarioId scenario)
         {
             Scenario = scenario;
+        }
+    }
+
+    public class PlacementFlow
+    {
+        public PlacementState State { get; private set; } = PlacementState.Scanning;
+
+        public bool PlanesFound(int count)
+        {
+            return State == PlacementState.Scanning && count > 0 && Change(PlacementState.Aiming);
+        }
+
+        public bool Tapped(bool hitFloor)
+        {
+            var allowed = hitFloor && (State == PlacementState.Aiming || State == PlacementState.Previewing);
+            return allowed && Change(PlacementState.Previewing);
+        }
+
+        public bool Confirm()
+        {
+            return State == PlacementState.Previewing && Change(PlacementState.Confirmed);
+        }
+
+        public bool Move()
+        {
+            return State == PlacementState.Confirmed && Change(PlacementState.Previewing);
+        }
+
+        bool Change(PlacementState next)
+        {
+            State = next;
+            return true;
+        }
+    }
+
+    public static class ScreenTap
+    {
+        public static bool TryGet(out Vector2 point)
+        {
+            point = default;
+            var pointer = Pointer.current;
+            if (pointer == null || !pointer.press.wasPressedThisFrame)
+            {
+                return false;
+            }
+
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            {
+                return false;
+            }
+
+            point = pointer.position.ReadValue();
+            return true;
         }
     }
 }

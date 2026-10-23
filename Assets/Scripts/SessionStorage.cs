@@ -17,8 +17,12 @@ namespace FirstResponse
 
     public class SessionStorage : ISessionStorage
     {
+        static ISessionStorage device;
+
         readonly string folder;
         readonly int keep;
+
+        public static ISessionStorage Device => device ??= new SessionStorage(Path.Combine(Application.persistentDataPath, "sessions"));
 
         public SessionStorage(string folder, int keep = 100)
         {
