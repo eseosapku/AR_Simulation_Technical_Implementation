@@ -73,3 +73,11 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Raw 8K source textures (Poly Haven, CC0). Too large for GitHub (normal map is 134 MB).
+# Kept locally only; the app ships compressed 1K ASTC versions via ModelImportOptimizer.
+/[Aa]ssets/[Mm]odels/HeavyJerrycan/textures/
+/[Aa]ssets/[Mm]odels/HeavyJerrycan/textures.meta
+
+# Addressables local build output
+/ServerData/
