@@ -80,6 +80,28 @@ namespace FirstResponse.Tests
         }
 
         [Test]
+        public void DebriefCountsEveryMistake()
+        {
+            SessionRecord record = new SessionRecord();
+            record.criticalErrors.Add("ChooseIntervention: Tourniquet");
+            record.steps.Add(new StepResult { events = new List<string> { "wrong_Bare hands", "early_release", "distance_6.1cm" } });
+
+            Assert.AreEqual(3, CompletionScreen.ErrorCount(record));
+        }
+
+        [Test]
+        public void DebriefDescribesTheResult()
+        {
+            SessionRecord lost = new SessionRecord { outcome = "Failed" };
+            SessionRecord saved = new SessionRecord { outcome = "Passed", timeToControlSec = 74f };
+
+            Assert.AreEqual("The casualty was lost", CompletionScreen.Headline(lost));
+            Assert.AreEqual("Bleeding controlled", CompletionScreen.Headline(saved));
+            Assert.AreEqual("74 s", CompletionScreen.TimeText(74.2f));
+            Assert.AreEqual("Not controlled", CompletionScreen.TimeText(0f));
+        }
+
+        [Test]
         public void TipPointsAtTheBiggestMistake()
         {
             SessionRecord record = new SessionRecord();
