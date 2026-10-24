@@ -40,6 +40,7 @@ namespace FirstResponse
             {
                 rightFirstTime = false;
                 Log("wrong_" + options[index]);
+                EventBus<Feedback>.Publish(Feedback.Mistake);
                 return false;
             }
 

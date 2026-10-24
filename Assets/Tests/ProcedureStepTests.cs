@@ -52,6 +52,20 @@ namespace FirstResponse.Tests
         }
 
         [Test]
+        public void WrongChoiceAnnouncesAMistakeForAudio()
+        {
+            Feedback heard = (Feedback)(-1);
+            EventBus<Feedback>.Clear();
+            EventBus<Feedback>.Subscribe(f => heard = f);
+            ChoiceStep step = Intervention();
+            step.Enter(context);
+            step.Choose(1);
+            EventBus<Feedback>.Clear();
+
+            Assert.AreEqual(Feedback.Mistake, heard);
+        }
+
+        [Test]
         public void CriticalChoiceIsRecorded()
         {
             ChoiceStep step = Intervention();
