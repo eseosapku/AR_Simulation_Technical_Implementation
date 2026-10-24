@@ -2,6 +2,20 @@ using System.Collections.Generic;
 
 namespace FirstResponse
 {
+    public readonly struct StepStarted
+    {
+        public readonly ProcedureStep Step;
+        public readonly int Index;
+        public readonly int Count;
+
+        public StepStarted(ProcedureStep step, int index, int count)
+        {
+            Step = step;
+            Index = index;
+            Count = count;
+        }
+    }
+
     public class StepContext
     {
         public readonly ScenarioConfig Config;
