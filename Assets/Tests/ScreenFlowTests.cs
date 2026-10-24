@@ -82,6 +82,13 @@ namespace FirstResponse.Tests
         }
 
         [Test]
+        public void HudClockShowsMinutesAndSeconds()
+        {
+            Assert.AreEqual("00:07", HudStatus.Clock(7.9f));
+            Assert.AreEqual("01:12", HudStatus.Clock(72f));
+        }
+
+        [Test]
         public void HistoryShowsScenarioNames()
         {
             Assert.AreEqual("Thigh wound", HistoryScreen.ScenarioName("Thigh"));

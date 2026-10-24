@@ -22,6 +22,14 @@ namespace FirstResponse
 
         public float Elapsed { get; private set; }
 
+        private void Awake()
+        {
+            if (tracking == null)
+            {
+                tracking = FindAnyObjectByType<ARTrackingManager>();
+            }
+        }
+
         private void OnEnable()
         {
             EventBus<ScenarioChosen>.Subscribe(OnChosen);
@@ -99,6 +107,11 @@ namespace FirstResponse
             {
                 tap.Tap();
             }
+        }
+
+        public void Stop()
+        {
+            running = false;
         }
 
         private void StartStep()
