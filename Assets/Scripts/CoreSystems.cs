@@ -1,8 +1,35 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace FirstResponse
 {
+    public static class EventBus<T>
+    {
+        private static Action<T> handlers;
+
+        public static void Subscribe(Action<T> handler)
+        {
+            handlers -= handler;
+            handlers += handler;
+        }
+
+        public static void Unsubscribe(Action<T> handler)
+        {
+            handlers -= handler;
+        }
+
+        public static void Publish(T message)
+        {
+            handlers?.Invoke(message);
+        }
+
+        public static void Clear()
+        {
+            handlers = null;
+        }
+    }
+
     public interface IPoolable
     {
         void OnSpawn();
@@ -56,7 +83,7 @@ namespace FirstResponse
         private T Create()
         {
             CreatedCount++;
-            return Object.Instantiate(prefab, parent);
+            return UnityEngine.Object.Instantiate(prefab, parent);
         }
     }
 }

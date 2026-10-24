@@ -42,11 +42,21 @@ namespace FirstResponse
         private void OnEnable()
         {
             EventBus<StepStarted>.Subscribe(OnStepStarted);
+            EventBus<HazardSecured>.Subscribe(OnHazardSecured);
         }
 
         private void OnDisable()
         {
             EventBus<StepStarted>.Unsubscribe(OnStepStarted);
+            EventBus<HazardSecured>.Unsubscribe(OnHazardSecured);
+        }
+
+        private void OnHazardSecured(HazardSecured message)
+        {
+            if (simulation.CurrentStep != null && simulation.CurrentStep.Id == "SecureScene")
+            {
+                OnTap();
+            }
         }
 
         protected override void OnShown()

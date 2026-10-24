@@ -1921,6 +1921,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 97469935}
   m_CullTransparentMesh: 1
+--- !u!1 &123712804
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 123712806}
+  - component: {fileID: 123712805}
+  m_Layer: 0
+  m_Name: ModelLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &123712805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123712804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a604c37a5cd41264c974795153e1e060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FirstResponse::FirstResponse.ModelLoader
+  catalog: {fileID: 11400000, guid: c5b1f58b685b4c841ad2726330382602, type: 2}
+  crashSite: {fileID: 494753690}
+  placeholder: {fileID: 1441406307}
+--- !u!4 &123712806
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123712804}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &127510278
 GameObject:
   m_ObjectHideFlags: 0
@@ -28494,3 +28541,4 @@ SceneRoots:
   - {fileID: 1852776472}
   - {fileID: 841976556}
   - {fileID: 2114925560}
+  - {fileID: 123712806}
