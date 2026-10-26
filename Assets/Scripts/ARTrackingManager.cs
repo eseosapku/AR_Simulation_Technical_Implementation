@@ -23,6 +23,11 @@ namespace FirstResponse
             imageManager.trackablesChanged.RemoveListener(OnChanged);
         }
 
+        private void Update()
+        {
+            snapshot.ScreenHeld = ScreenTap.IsHeld();
+        }
+
         private void OnChanged(ARTrackablesChangedEventArgs<ARTrackedImage> changes)
         {
             foreach (ARTrackedImage image in changes.added)

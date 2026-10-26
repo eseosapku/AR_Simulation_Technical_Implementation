@@ -18,7 +18,7 @@ MonoBehaviour:
   baseFlowMlPerSec: 5
   fatalLossMl: 1500
   pressureIsEnough: 1
-  pressureSeconds: 30
+  pressureSeconds: 10
   tourniquetMinCm: 5
   tourniquetMaxCm: 7
   jointClearanceCm: 5

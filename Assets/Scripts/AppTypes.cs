@@ -128,5 +128,16 @@ namespace FirstResponse
             point = pointer.position.ReadValue();
             return true;
         }
+
+        public static bool IsHeld()
+        {
+            Pointer pointer = Pointer.current;
+            if (pointer == null || !pointer.press.isPressed)
+            {
+                return false;
+            }
+
+            return EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject();
+        }
     }
 }

@@ -15,10 +15,10 @@ MonoBehaviour:
   scenario: 1
   displayName: Thigh wound
   briefing: An okada passenger was thrown onto the road. The thigh is bleeding heavily
-  baseFlowMlPerSec: 25
-  fatalLossMl: 1500
+  baseFlowMlPerSec: 10
+  fatalLossMl: 2000
   pressureIsEnough: 0
-  pressureSeconds: 30
+  pressureSeconds: 10
   tourniquetMinCm: 5
   tourniquetMaxCm: 7
   jointClearanceCm: 5

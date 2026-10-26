@@ -17,11 +17,23 @@ namespace FirstResponse
                 return;
             }
 
+            Vector3 spot = body.position;
             body.localScale *= FitScale(bounds.size, targetSize);
             if (WorldBounds(body.gameObject, out Bounds scaled))
             {
-                body.position += Vector3.up * (ground.position.y - scaled.min.y);
+                Vector3 shift = spot - scaled.center;
+                shift.y = ground.position.y - scaled.min.y;
+                body.position += shift;
             }
+        }
+
+        public static Pose FrontOf(Vector3 viewPosition, Vector3 viewForward, float floorY, float distance)
+        {
+            Vector3 flat = new Vector3(viewForward.x, 0f, viewForward.z);
+            flat = flat.sqrMagnitude > 0.0001f ? flat.normalized : Vector3.forward;
+            Vector3 position = viewPosition + flat * distance;
+            position.y = floorY;
+            return new Pose(position, Quaternion.LookRotation(-flat));
         }
 
         public static bool PlayAnimation(GameObject model, string clipHint)
@@ -38,6 +50,8 @@ namespace FirstResponse
                 {
                     state.wrapMode = WrapMode.ClampForever;
                     legacy.Play(state.name);
+                    state.normalizedTime = 1f;
+                    legacy.Sample();
                     return true;
                 }
             }

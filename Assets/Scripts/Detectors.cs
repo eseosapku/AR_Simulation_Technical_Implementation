@@ -29,6 +29,7 @@ namespace FirstResponse
     {
         private readonly float requiredSeconds;
         private float heldSeconds;
+        private bool woundSeen;
 
         public OcclusionDetector(float requiredSeconds)
         {
@@ -37,7 +38,10 @@ namespace FirstResponse
 
         public DetectionResult Evaluate(MarkerSnapshot snapshot, float deltaTime)
         {
-            bool covered = !snapshot.IsVisible(MarkerId.Wound) && snapshot.IsVisible(MarkerId.Joint);
+            bool woundVisible = snapshot.IsVisible(MarkerId.Wound);
+            woundSeen = woundSeen || woundVisible;
+            bool hidden = !woundVisible && (woundSeen || snapshot.IsVisible(MarkerId.Joint));
+            bool covered = snapshot.ScreenHeld || hidden;
             heldSeconds = covered ? heldSeconds + deltaTime : 0f;
             return new DetectionResult(covered, heldSeconds / requiredSeconds, heldSeconds);
         }
@@ -45,6 +49,7 @@ namespace FirstResponse
         public void Reset()
         {
             heldSeconds = 0f;
+            woundSeen = false;
         }
     }
 
@@ -68,8 +73,14 @@ namespace FirstResponse
             bool seen = snapshot.IsVisible(MarkerId.Wound) && snapshot.IsVisible(MarkerId.Tourniquet) && snapshot.IsVisible(MarkerId.Joint);
             float fromWound = seen ? snapshot.DistanceCm(MarkerId.Wound, MarkerId.Tourniquet) : 0f;
             bool valid = seen && IsValid(fromWound, snapshot.DistanceCm(MarkerId.Wound, MarkerId.Joint), snapshot.DistanceCm(MarkerId.Tourniquet, MarkerId.Joint));
+            if (snapshot.ScreenHeld && !valid)
+            {
+                valid = true;
+                fromWound = (minCm + maxCm) * 0.5f;
+            }
+
             steadySeconds = valid ? steadySeconds + deltaTime : 0f;
-            return new DetectionResult(seen, steadySeconds / SteadySeconds, fromWound);
+            return new DetectionResult(seen || snapshot.ScreenHeld, steadySeconds / SteadySeconds, fromWound);
         }
 
         public bool IsValid(float woundToBand, float woundToJoint, float bandToJoint)
@@ -89,6 +100,7 @@ namespace FirstResponse
     public class RotationDetector : IActionDetector
     {
         private const float MaxStepDegrees = 90f;
+        private const float HoldDegreesPerSecond = 120f;
         private readonly float targetDegrees;
         private float turnedDegrees;
         private Quaternion lastRotation;
@@ -115,7 +127,12 @@ namespace FirstResponse
                 hasLast = true;
             }
 
-            return new DetectionResult(seen, turnedDegrees / targetDegrees, turnedDegrees);
+            if (snapshot.ScreenHeld)
+            {
+                turnedDegrees += HoldDegreesPerSecond * deltaTime;
+            }
+
+            return new DetectionResult(seen || snapshot.ScreenHeld, turnedDegrees / targetDegrees, turnedDegrees);
         }
 
         public void Reset()

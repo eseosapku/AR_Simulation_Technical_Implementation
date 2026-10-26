@@ -11,6 +11,7 @@ namespace FirstResponse
         [SerializeField] private int prewarm = 40;
         [SerializeField] private float dropsPerMl = 0.8f;
 
+        private const float WoundHeight = 0.07f;
         private ObjectPool<BloodDrop> pool;
         private float owed;
         private bool woundSeen;
@@ -45,17 +46,23 @@ namespace FirstResponse
             }
         }
 
+        public void SetWound(Transform wound)
+        {
+            fallbackWound = wound;
+            woundSeen = false;
+        }
+
         private Vector3 WoundPosition()
         {
             MarkerSnapshot markers = tracking.Snapshot;
-            if (markers.IsVisible(MarkerId.Wound))
+            if (fallbackWound == null && markers.IsVisible(MarkerId.Wound))
             {
                 woundSeen = true;
             }
 
             if (woundSeen)
             {
-                return markers.Position(MarkerId.Wound);
+                return markers.Position(MarkerId.Wound) + markers.Rotation(MarkerId.Wound) * Vector3.up * WoundHeight;
             }
 
             return fallbackWound != null ? fallbackWound.position : transform.position;

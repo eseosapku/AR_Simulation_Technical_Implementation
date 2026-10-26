@@ -10,6 +10,7 @@ namespace FirstResponse
         [SerializeField] private ModelCatalog catalog;
         [SerializeField] private Transform crashSite;
         [SerializeField] private GameObject placeholder;
+        [SerializeField] private Material paintTemplate;
 
         private readonly List<AsyncOperationHandle<GameObject>> handles = new List<AsyncOperationHandle<GameObject>>();
 
@@ -94,6 +95,7 @@ namespace FirstResponse
             }
 
             model.name = entry.label;
+            ModelPaint.Apply(model, paintTemplate);
             Transform body = model.transform;
             body.localPosition = entry.position;
             body.localRotation = Quaternion.Euler(entry.rotation);

@@ -21,14 +21,37 @@ namespace FirstResponse
                     new[] { "Spurting", "Pooling", "Oozing" }, thigh ? Spurting : Oozing),
                 new ChoiceStep("ChooseIntervention", "Choose your first action", "What do you do first?", "HandStop",
                     new[] { "Direct pressure", "Tourniquet" }, 0, thigh ? -1 : 1),
-                new PressureStep()
+                new CardStep("DirectPressure", "Press on the wound", "Show card A: the gauze pad you press with", "HandStop",
+                    MarkerId.Wound, "Pressure", Treatment.Pressure)
             };
 
             if (thigh)
             {
-                steps.Add(new TourniquetStep());
-                steps.Add(new WindlassStep());
-                steps.Add(new TapStep("RecordTime", "Note the time", "Tap to record when the tourniquet went on", "Clock", 1));
+                steps.Add(new ChoiceStep("ImproviseTourniquet", "Pressure is failing", "No tourniquet kit. What do you make one from?", "HandStop",
+                    new[] { "Cloth folded 5 cm wide and a stick", "Thin rope or wire", "Elastic hair band" }, 0, 1));
+                steps.Add(new CardStep("FetchCloth", "Get the cloth", "Show card B: the 5 cm cloth band", "Scan",
+                    MarkerId.Tourniquet, "Cloth", Treatment.None));
+                steps.Add(new DemoStep("TourniquetPlacement", "Place the band", "Where does the band go?", "Scan",
+                    new[] { "Right over the wound", "Over the knee", "5 to 7 cm above the wound" }, 2, 1, "Wrap", Treatment.Tourniquet));
+                steps.Add(new DemoStep("TieKnot", "Start the knot", "How do you tie the band?", "HandStop",
+                    new[] { "Half knot on top of the leg", "Tie it under the leg", "Just tuck the end in" }, 0, -1, "Knot", Treatment.None));
+                steps.Add(new CardStep("FetchStick", "Add the stick", "Show card C: the stick goes on the half knot", "Rotate",
+                    MarkerId.Windlass, "Stick", Treatment.None));
+                steps.Add(new DemoStep("WindlassTightening", "Tighten", "How far do you twist the stick?", "Rotate",
+                    new[] { "One turn only", "Until it feels snug", "Until the bleeding stops" }, 2, -1, "Twist", Treatment.Tighten));
+                steps.Add(new DemoStep("LockWindlass", "Secure the stick", "How do you stop it unwinding?", "HandStop",
+                    new[] { "Hold it in your hand", "Let it go", "Tie both stick ends down" }, 2, 1, "Lock", Treatment.None));
+                steps.Add(new CardStep("RecordTime", "Record the time", "Show card D: the pen writes TK and the time", "Clock",
+                    MarkerId.Joint, "Mark", Treatment.None));
+                steps.Add(new ChoiceStep("KeepOn", "Leave it on", "When can the tourniquet come off?", "Clock",
+                    new[] { "After 10 minutes", "Only at the hospital", "When the bleeding stops" }, 1));
+            }
+            else
+            {
+                steps.Add(new CardStep("Dressing", "Bandage the wound", "Show card B: roll the bandage over the pad", "Droplet",
+                    MarkerId.Tourniquet, "Bandage", Treatment.None));
+                steps.Add(new ChoiceStep("CheckCirculation", "Check the hand", "The fingers turn cold and blue. What now?", "Bulb",
+                    new[] { "Leave it alone", "Loosen the bandage a little", "Add another bandage" }, 1));
             }
 
             steps.Add(new TapStep("ShockCare", "Treat for shock", "Lay them down and keep them warm", "Bulb", 1));

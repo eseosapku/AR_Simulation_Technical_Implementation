@@ -26,24 +26,46 @@ namespace FirstResponse.Tests
         }
 
         [Test]
-        public void ForearmStopsAfterPressure()
+        public void ForearmBandagesAfterPressure()
         {
             config.pressureIsEnough = true;
             List<ProcedureStep> steps = ScenarioFactory.Build(config);
 
-            Assert.AreEqual(7, steps.Count);
-            Assert.IsFalse(steps.Exists(s => s is TourniquetStep));
+            Assert.AreEqual(9, steps.Count);
+            Assert.AreEqual(MarkerId.Wound, ((CardStep)steps[5]).Card);
+            Assert.AreEqual("Bandage", ((CardStep)steps[6]).Clip);
         }
 
         [Test]
-        public void ThighAddsTourniquetWindlassAndTime()
+        public void ThighBuildsTheTourniquetInOrder()
         {
             config.pressureIsEnough = false;
-            List<ProcedureStep> steps = ScenarioFactory.Build(config);
+            List<string> clips = new List<string>();
+            foreach (ProcedureStep step in ScenarioFactory.Build(config))
+            {
+                if (step is CardStep card)
+                {
+                    clips.Add(card.Clip);
+                }
+                else if (step is DemoStep demo)
+                {
+                    clips.Add(demo.Clip);
+                }
+            }
 
-            Assert.AreEqual(10, steps.Count);
-            Assert.IsInstanceOf<TourniquetStep>(steps[6]);
-            Assert.IsInstanceOf<WindlassStep>(steps[7]);
+            CollectionAssert.AreEqual(new[] { "Pressure", "Cloth", "Wrap", "Knot", "Stick", "Twist", "Lock", "Mark" }, clips);
+        }
+
+        [Test]
+        public void WireTourniquetIsACriticalError()
+        {
+            config.pressureIsEnough = false;
+            StepContext context = Context();
+            ChoiceStep improvise = (ChoiceStep)ScenarioFactory.Build(config)[6];
+            improvise.Enter(context);
+            improvise.Choose(1);
+
+            Assert.AreEqual(1, context.CriticalErrors.Count);
         }
 
         [Test]

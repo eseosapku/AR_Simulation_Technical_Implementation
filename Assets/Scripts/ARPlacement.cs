@@ -12,6 +12,7 @@ namespace FirstResponse
         [SerializeField] private Transform reticle;
         [SerializeField] private Transform crashSite;
 
+        private const float FrontDistance = 1.3f;
         private static readonly List<ARRaycastHit> Hits = new List<ARRaycastHit>();
         private readonly PlacementFlow flow = new PlacementFlow();
         private ARAnchor anchor;
@@ -82,13 +83,12 @@ namespace FirstResponse
             return true;
         }
 
-        private void Preview(Vector3 position)
+        private void Preview(Vector3 floorPoint)
         {
-            Vector3 toCamera = Camera.main.transform.position - position;
-            toCamera.y = 0f;
-            Quaternion facing = toCamera.sqrMagnitude > 0.001f ? Quaternion.LookRotation(toCamera) : Quaternion.identity;
+            Transform view = Camera.main.transform;
+            Pose front = ModelPose.FrontOf(view.position, view.forward, floorPoint.y, FrontDistance);
             crashSite.SetParent(null);
-            crashSite.SetPositionAndRotation(position, facing);
+            crashSite.SetPositionAndRotation(front.position, front.rotation);
             crashSite.gameObject.SetActive(true);
         }
 

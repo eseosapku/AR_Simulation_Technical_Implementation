@@ -18,6 +18,8 @@ namespace FirstResponse
 
         public string[] Options => options;
 
+        public int Correct => correct;
+
         protected override void OnEnter(StepContext stepContext)
         {
             context = stepContext;
@@ -44,8 +46,13 @@ namespace FirstResponse
                 return false;
             }
 
+            OnCorrect(context);
             Complete();
             return true;
+        }
+
+        protected virtual void OnCorrect(StepContext stepContext)
+        {
         }
 
         protected override float Score()

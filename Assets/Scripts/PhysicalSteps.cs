@@ -36,7 +36,7 @@ namespace FirstResponse
     public class PressureStep : PhysicalStep
     {
         public PressureStep()
-            : base("DirectPressure", "Press on the wound", "Cover marker A with your hand", "HandStop")
+            : base("DirectPressure", "Press on the wound", "Cover marker A, or hold the screen", "HandStop")
         {
         }
 
@@ -73,7 +73,7 @@ namespace FirstResponse
     public class TourniquetStep : PhysicalStep
     {
         public TourniquetStep()
-            : base("TourniquetPlacement", "Place the tourniquet", "Band 5 to 7 cm above the wound", "Scan")
+            : base("TourniquetPlacement", "Place the tourniquet", "Put strap B on the green line, above the wound and away from the knee", "Scan")
         {
         }
 
@@ -103,7 +103,7 @@ namespace FirstResponse
         private const float FastSeconds = 30f;
 
         public WindlassStep()
-            : base("WindlassTightening", "Twist the windlass", "Turn the stick until bleeding stops", "Rotate")
+            : base("WindlassTightening", "Twist the windlass", "Turn marker C like a dial until the bleeding stops", "Rotate")
         {
         }
 

@@ -54,6 +54,35 @@ namespace FirstResponse.Tests
         }
 
         [Test]
+        public void CoveringASeenWoundCountsWithoutTheJoint()
+        {
+            OcclusionDetector detector = new OcclusionDetector(30f);
+            snapshot.Set(MarkerId.Joint, false, default);
+            detector.Evaluate(snapshot, 1f);
+            snapshot.Set(MarkerId.Wound, false, default);
+
+            Assert.IsTrue(detector.Evaluate(snapshot, 1f).IsActive);
+        }
+
+        [Test]
+        public void HoldingTheScreenCountsAsPressure()
+        {
+            OcclusionDetector detector = new OcclusionDetector(10f);
+            snapshot.ScreenHeld = true;
+
+            Assert.IsTrue(detector.Evaluate(snapshot, 10f).IsSatisfied);
+        }
+
+        [Test]
+        public void HoldingTheScreenPlacesTheBandAndTurnsTheWindlass()
+        {
+            snapshot.ScreenHeld = true;
+
+            Assert.IsTrue(new PlacementDetector(5f, 7f, 5f).Evaluate(snapshot, 1f).IsSatisfied);
+            Assert.IsTrue(new RotationDetector(540f).Evaluate(snapshot, 4.5f).IsSatisfied);
+        }
+
+        [Test]
         public void TourniquetSixCentimetresAboveTheWoundIsAccepted()
         {
             PlacementDetector detector = new PlacementDetector(5f, 7f, 5f);

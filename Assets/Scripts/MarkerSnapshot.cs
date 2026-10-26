@@ -17,6 +17,8 @@ namespace FirstResponse
         private readonly bool[] visible = new bool[Count];
         private readonly Pose[] poses = new Pose[Count];
 
+        public bool ScreenHeld { get; set; }
+
         public void Set(MarkerId id, bool isVisible, Pose pose)
         {
             visible[(int)id] = isVisible;

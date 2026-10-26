@@ -55,6 +55,17 @@ namespace FirstResponse.Tests
         }
 
         [Test]
+        public void SceneIsPlacedOnTheFloorInFrontOfTheCamera()
+        {
+            Pose front = ModelPose.FrontOf(new Vector3(0f, 1.5f, 0f), new Vector3(0f, -0.5f, 1f), 0.2f, 1.3f);
+
+            Assert.AreEqual(0f, front.position.x, 0.001f);
+            Assert.AreEqual(0.2f, front.position.y, 0.001f);
+            Assert.AreEqual(1.3f, front.position.z, 0.001f);
+            Assert.AreEqual(-1f, (front.rotation * Vector3.forward).z, 0.001f);
+        }
+
+        [Test]
         public void ModelsAreScaledToTheirTargetSize()
         {
             Assert.AreEqual(0.5f, ModelPose.FitScale(new Vector3(1f, 4f, 2f), 2f), 0.001f);
